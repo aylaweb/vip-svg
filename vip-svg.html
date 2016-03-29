@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2016 The Ayla Project Authors. All rights reserved.
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../libs-html/d3.html">
+
+<dom-module id="vip-svg">
+    <style>
+        :host {
+            flex: 1 1 0px;
+            display: flex;
+        }
+        #container_svg{
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        #svg_area{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <template id="template_svg">
+        <div id="container_svg">
+            <svg id="svg_area"></svg>
+            <content select="*"></content>
+        </div>  
+    </template>
+    <script>
+        Polymer({
+            is: 'vip-svg',
+            properties: {
+                svg: {
+                    type: Object,
+                    value: function() { return {}; },
+                    observer: '_svgChanged'
+                },
+                relative: {
+                    type: Boolean,
+                    value: false,
+                    observer: '_relativeChanged'
+                }
+            },
+            lineFunction: d3.svg.line()
+                    .x(function (d) {
+                        return d.x;
+                    })
+                    .y(function (d) {
+                        return d.y;
+                    })
+                    .interpolate("linear"),
+            created: function () {
+                console.log(this.id + " -> vip-svg -> Event created");
+            },
+            ready: function () {
+                console.log(this.id + " -> vip-svg -> Event created");
+                this.svg = {};
+            },
+            attached: function () {
+                console.log(this.id + " -> vip-svg -> Event created");
+            },
+            detached: function () {
+                console.log(this.id + " -> vip-svg -> Event created");
+            },
+            _svgChanged: function () {
+                this.loadSvg();
+            },
+            _relativeChanged: function () {
+                this.$.svg_area.setAttribute("viewBox", "0 0 100 100");
+            },
+            loadSvg: function () {
+                console.log("loadSvg" + this.id);
+                var that = this;
+                if (this.svg) {
+                    for (var svgType in this.svg) {
+                        if (svgType === "circles") {
+                            var jsonCircles = this.svg.circles;
+                            this.circles = d3.select(this.$.svg_area).selectAll("circle")
+                                    .data(jsonCircles)
+                                    .enter()
+                                    .append("circle");
+                            var circleAttributes = this.circles
+                                    .attr("id", function (d) {
+                                        return d.id;
+                                    })
+                                    .attr("cx", function (d) {
+                                        return d.cx;
+                                    })
+                                    .attr("cy", function (d) {
+                                        return d.cy;
+                                    })
+                                    .attr("r", function (d) {
+                                        return d.r;
+                                    })
+                                    .style("fill", function (d) {
+                                        return d.fill;
+                                    })
+                                    .style("stroke", function (d) {
+                                        return d.stroke;
+                                    })
+                                    .style("stroke-width", function (d) {
+                                        return d.stroke_width;
+                                    })
+                                    .style("opacity", function (d) {
+                                        return d.opacity;
+                                    });
+                        }
+                        else if (svgType === "ellipses") {
+                            var jsonEllipses = this.svg.ellipses;
+                            this.ellipses = d3.select(this.$.svg_area).selectAll("ellipse")
+                                    .data(jsonEllipses)
+                                    .enter()
+                                    .append("ellipse");
+                            var ellipseAttributes = this.ellipses
+                                    .attr("id", function (d) {
+                                        return d.id;
+                                    })
+                                    .attr("cx", function (d) {
+                                        return d.cx;
+                                    })
+                                    .attr("cy", function (d) {
+                                        return d.cy;
+                                    })
+                                    .attr("rx", function (d) {
+                                        return d.rx;
+                                    })
+                                    .attr("ry", function (d) {
+                                        return d.ry;
+                                    })
+                                    .style("fill", function (d) {
+                                        return d.fill;
+                                    })
+                                    .style("stroke", function (d) {
+                                        return d.stroke;
+                                    })
+                                    .style("stroke-width", function (d) {
+                                        return d.stroke_width;
+                                    })
+                                    .style("opacity", function (d) {
+                                        return d.opacity;
+                                    });
+                        }
+                        else if (svgType === "lines") {
+                            var jsonLines = this.svg.lines;
+                            this.lines = d3.select(this.$.svg_area).selectAll("line")
+                                    .data(jsonLines)
+                                    .enter()
+                                    .append("line");
+                            var lineAttributes = this.lines
+                                    .attr("id", function (d) {
+                                        return d.id;
+                                    })
+                                    .attr("x1", function (d) {
+                                        return d.x1;
+                                    })
+                                    .attr("y1", function (d) {
+                                        return d.y1;
+                                    })
+                                    .attr("x2", function (d) {
+                                        return d.x2;
+                                    })
+                                    .attr("y2", function (d) {
+                                        return d.y2;
+                                    })
+                                    .style("stroke", function (d) {
+                                        return d.stroke;
+                                    })
+                                    .style("stroke-width", function (d) {
+                                        return d.stroke_width;
+                                    })
+                                    .style("opacity", function (d) {
+                                        return d.opacity;
+                                    });
+                        }
+                        else if (svgType === "rects") {
+                            var jsonRects = this.svg.rects;
+                            this.rects = d3.select(this.$.svg_area).selectAll("rect")
+                                    .data(jsonRects)
+                                    .enter()
+                                    .append("rect");
+                            var rectAttributes = this.rects
+                                    .attr("id", function (d) {
+                                        return d.id;
+                                    })
+                                    .attr("x", function (d) {
+                                        return d.x;
+                                    })
+                                    .attr("y", function (d) {
+                                        return d.y;
+                                    })
+                                    .attr("width", function (d) {
+                                        return d.width;
+                                    })
+                                    .attr("height", function (d) {
+                                        return d.height;
+                                    })
+                                    .style("fill", function (d) {
+                                        return d.fill;
+                                    })
+                                    .style("stroke", function (d) {
+                                        return d.stroke;
+                                    })
+                                    .style("opacity", function (d) {
+                                        return d.opacity;
+                                    })
+                                    .style("stroke-width", function (d) {
+                                        return d.stroke_width;
+                                    });
+                        }
+                        else if (svgType === "foreignObjects") {
+                            var jsonForeignObjects = this.svg.foreignObjects;
+                            this.foreignObjects = d3.select(this.$.svg_area).selectAll("foreignObject")
+                                    .data(jsonForeignObjects)
+                                    .enter()
+                                    .append("foreignObject");
+                            this.divForeignObjects = this.foreignObjects
+                                    .append("xhtml:div");
+
+                            var foreignObjectAttributes = this.foreignObjects
+                                    .attr("id", function (d) {
+                                        return d.id;
+                                    })
+                                    .attr("x", function (d) {
+                                        return d.x;
+                                    })
+                                    .attr("y", function (d) {
+                                        return d.y;
+                                    })
+                                    .attr("width", function (d) {
+                                        return d.width;
+                                    })
+                                    .attr("height", function (d) {
+                                        return d.height;
+                                    })
+                                    .style("opacity", function (d) {
+                                        return d.opacity;
+                                    });
+                            var divForeignObjectsAttributes = this.divForeignObjects
+                                    .html(function (d) {
+                                        return d.text;
+                                    })
+                                    .style("font-size", function (d) {
+                                        return d.font_size;
+                                    })
+                                    .style("font", function (d) {
+                                        return d.font;
+                                    })
+                                    .style("color", function (d) {
+                                        return d.color;
+                                    })
+                                    .style("background-color", function (d) {
+                                        return d.background_color;
+                                    })
+                                    .style("width", function (d) {
+                                        return d.width_div;
+                                    })
+                                    .style("height", function (d) {
+                                        return d.height_div;
+                                    })
+                                    .style("border-radius", function (d) {
+                                        return d.border_radius;
+                                    });
+                        }
+                        else if (svgType === "texts") {
+                            var jsonTexts = this.svg.texts;
+                            this.texts = d3.select(this.$.svg_area).selectAll("text")
+                                    .data(jsonTexts)
+                                    .enter()
+                                    .append("text");
+                            var textAttributes = this.texts
+                                    .attr("id", function (d) {
+                                        return d.id;
+                                    })
+                                    .attr("x", function (d) {
+                                        return d.x;
+                                    })
+                                    .attr("y", function (d) {
+                                        return d.y;
+                                    })
+                                    .style("opacity", function (d) {
+                                        return d.opacity;
+                                    })
+                                    .style("fill", function (d) {
+                                        return d.fill;
+                                    })
+                                    .style("stroke", function (d) {
+                                        return d.stroke;
+                                    })
+                                    .style("stroke-width", function (d) {
+                                        return d.stroke_width;
+                                    })
+                                    .style("font-size", function (d) {
+                                        return d.font_size;
+                                    })
+                                    .style("font-family", function (d) {
+                                        return d.font_family;
+                                    })
+                                    .style("font-style", function (d) {
+                                        return d.font_style;
+                                    })
+                                    .text(function (d) {
+                                        return d.text;
+                                    });
+                        }
+                        else if (svgType === "paths") {
+                            var jsonPaths = this.svg.paths;
+                            this.paths = d3.select(this.$.svg_area).selectAll("path")
+                                    .data(jsonPaths)
+                                    .enter()
+                                    .append("path");
+                            var pathAttributes = this.paths
+                                    .attr("id", function (d) {
+                                        return d.id;
+                                    })
+                                    .attr("d", function (d) {
+                                        return that.lineFunction(d.points)
+                                    })
+                                    .style("opacity", function (d) {
+                                        return d.opacity;
+                                    })
+                                    .style("fill", function (d) {
+                                        return d.fill;
+                                    })
+                                    .style("stroke", function (d) {
+                                        return d.stroke;
+                                    })
+                                    .style("stroke-width", function (d) {
+                                        return d.stroke_width;
+                                    });
+                        }
+
+                    }
+                }
+            }
+        });
+    </script>
+</dom-module>
